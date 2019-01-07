@@ -5,17 +5,17 @@ defmodule ClincElixirWeb.Api.V1.ClincView do
 
   def render("query.json", %{
         request:
-          %{
+          body = %{
             state: "account_and_routing_number",
             slots:
-              %{
+              slots = %{
                 _ACCOUNTS_:
-                  %{
+                  accounts = %{
                     values: [value | values]
-                  } = accounts
-              } = slots,
+                  }
+              },
             intent: "account_and_routing_number_start"
-          } = body
+          }
       }) do
     log(:req, %{handling: "FROM_ROOT_WITH_QUALIFIER", data: body})
 
