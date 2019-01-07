@@ -3,21 +3,62 @@ defmodule ClincElixirWeb.Api.V1.ClincView do
   require Jason
   require Logger
 
-  def render("query.json", %{request: %{state: "account_and_routing_number"} = body}) do
-    Logger.info("XXXXXXXXXXXXXXXXXXXXX HANDLER:  XXXXXXXXXXXXXXXXXXXX")
-    Logger.info("XXXXXXXXXXXXXXXXXXXXX REQUEST DATA START XXXXXXXXXXXXXXX")
-    Logger.info(Jason.encode!(body))
-    Logger.info("XXXXXXXXXXXXXXXXXXXXX REQUEST DATA END   XXXXXXXXXXXXXXX")
+  def render("query.json", %{
+        request:
+          %{
+            state: "account_and_routing_number",
+            slots:
+              %{
+                _ACCOUNTS_:
+                  %{
+                    values: [value | values]
+                  } = accounts
+              } = slots,
+            intent: "account_and_routing_number_start"
+          } = body
+      }) do
+    log(:req, %{handling: "FROM_ROOT_WITH_QUALIFIER", data: body})
+
+    resp = %{
+      body
+      | slots: %{
+          slots
+          | _ACCOUNTS_: %{
+              accounts
+              | values: [%{value | resolved: 1} | values]
+            }
+        }
+    }
+
+    log(:res, %{handling: "FROM_ROOT_WITH_QUALIFIER", data: resp})
+
+    resp
+  end
+
+  def render("query.json", %{
+        request:
+          %{
+            state: "account_and_routing_number",
+            slots: %{},
+            intent: "account_and_routing_number_start"
+          } = body
+      }) do
+    log(:req, %{handling: "FROM_ROOT_NO_SLOTS", data: body})
 
     body
   end
 
   def render("query.json", %{request: body}) do
-    Logger.info("XXXXXXXXXXXXXXXXXXXXX HANDLER: NONE XXXXXXXXXXXXXXXXXXXX")
-    Logger.info("XXXXXXXXXXXXXXXXXXXXX REQUEST DATA START XXXXXXXXXXXXXXX")
-    Logger.info(Jason.encode!(body))
-    Logger.info("XXXXXXXXXXXXXXXXXXXXX REQUEST DATA END   XXXXXXXXXXXXXXX")
+    log(:req, %{handling: "NO MATCH", data: body})
 
     body
+  end
+
+  defp log(reqres, %{handling: handling, data: data}) do
+    label = Map.get(%{req: "REQUEST", res: "RESPONSE"}, reqres)
+    Logger.info("XXXXXXXXXXXXXXXXXXXXX HANDLING: #{handling} XXXXXXXXXXXXXXXXXXXX")
+    Logger.info("XXXXXXXXXXXXXXXXXXXXX #{label} DATA START XXXXXXXXXXXXXXX")
+    Logger.info(Jason.encode!(data))
+    Logger.info("XXXXXXXXXXXXXXXXXXXXX #{label} DATA END   XXXXXXXXXXXXXXX")
   end
 end
