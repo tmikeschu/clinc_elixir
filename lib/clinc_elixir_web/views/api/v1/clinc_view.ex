@@ -46,19 +46,21 @@ defmodule ClincElixirWeb.Api.V1.ClincView do
     log(:req, %{handling: "FROM_ROOT_NO_SLOTS", data: body})
 
     body
+
+    log(:res, %{handling: "FROM_ROOT_NO_SLOTS", data: body})
   end
 
   def render("query.json", %{request: body}) do
     log(:req, %{handling: "NO MATCH", data: body})
 
     body
+
+    log(:res, %{handling: "NO MATCH", data: body})
   end
 
   defp log(reqres, %{handling: handling, data: data}) do
     label = Map.get(%{req: "REQUEST", res: "RESPONSE"}, reqres)
-    Logger.info("XXXXXXXXXXXXXXXXXXXXX HANDLING: #{handling} XXXXXXXXXXXXXXXXXXXX")
-    Logger.info("XXXXXXXXXXXXXXXXXXXXX #{label} DATA START XXXXXXXXXXXXXXX")
-    Logger.info(Jason.encode!(data))
-    Logger.info("XXXXXXXXXXXXXXXXXXXXX #{label} DATA END   XXXXXXXXXXXXXXX")
+    Logger.info("HANDLING: #{handling}")
+    Logger.info("#{label} DATA: #{Jason.encode!(data)}")
   end
 end
