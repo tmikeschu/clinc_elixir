@@ -44,7 +44,7 @@ defmodule ClincElixirWeb.Api.V1.ClincView do
   end
 
   @doc """
-  Hanldes a user entering their otp.
+  Handles a user entering their otp.
   For the six digit passcode, the query itself is used as the value.
   """
   def render("query.json", %{
@@ -100,7 +100,7 @@ defmodule ClincElixirWeb.Api.V1.ClincView do
   end
 
   @doc """
-  Hanldes case where user cancels from otp
+  Handles case where user cancels from otp
   E.g., "checking"
   """
   def render("query.json", %{
@@ -119,7 +119,7 @@ defmodule ClincElixirWeb.Api.V1.ClincView do
   end
 
   @doc """
-  Hanldes case where user provides account qualifier
+  Handles case where user provides account qualifier
   E.g., "checking"
   """
   def render("query.json", %{
