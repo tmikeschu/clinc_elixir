@@ -30,7 +30,7 @@ defmodule ClincElixirWeb do
   def view do
     quote do
       use Phoenix.View,
-        root: "lib/clinc_elixir_web/templates",
+        root: "lib/clinc_elixir_web/views",
         namespace: ClincElixirWeb
 
       # Import convenience functions from controllers
