@@ -49,8 +49,8 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Configure your database
 config :clinc_elixir, ClincElixir.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "tmikeschutte",
+  password: "",
   database: "clinc_elixir_dev",
   hostname: "localhost",
   pool_size: 10
