@@ -202,7 +202,7 @@ defmodule ClincElixirWeb.Api.V1.ClincView do
     put_in(
       body,
       [:slots, :_ACCOUNTS_],
-      %{type: "string", values: [%{account_id: account_id, resolved: 1}]}
+      %{type: "string", values: [%{account_id: account_id, resolved: "1"}]}
     )
   end
 
@@ -213,7 +213,7 @@ defmodule ClincElixirWeb.Api.V1.ClincView do
       fn [v | rest] ->
         by_type = &(Atom.to_string(&1.type) == v.account_dest)
         account = Enum.find(@accounts, %{id: nil}, by_type)
-        [Map.merge(v, %{account_id: account.id, resolved: 1}) | rest]
+        [Map.merge(v, %{account_id: account.id, resolved: "1"}) | rest]
       end
     )
   end
