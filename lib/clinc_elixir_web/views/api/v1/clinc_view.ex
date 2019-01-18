@@ -1118,7 +1118,7 @@ defmodule ClincElixirWeb.Api.V1.ClincView do
         |> log(:req, handling)
         |> put_in(
           [:slots, :_ACCOUNTS_],
-          %{type: "string", values: [%{resolved: 1, accounts: @accounts}]}
+          %{type: "string", values: [%{resolved: "1", accounts: @accounts}]}
         )
         |> add_response_slots("account_and_routing_number", %{
           account_list: account_list,
