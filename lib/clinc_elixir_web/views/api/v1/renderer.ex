@@ -21,6 +21,14 @@ defmodule ClincElixirWeb.Api.V1.Renderer do
           speakables: data
         })
       end
+
+      defp resolve_slot(body, slot_name) do
+        update_in(
+          body,
+          [:slots, slot_name, :values],
+          fn vs -> Enum.map(vs, &Map.merge(&1, %{resolved: 1})) end
+        )
+      end
     end
   end
 end

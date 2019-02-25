@@ -194,13 +194,14 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumber do
   end
 
   defp resolve_accounts(body) do
-    update_in(
-      body,
+    body
+    |> resolve_slot(:_ACCOUNTS_)
+    |> update_in(
       [:slots, :_ACCOUNTS_, :values],
       fn [v | rest] ->
         by_type = &(Atom.to_string(&1.type) == v.account_dest)
         account = Enum.find(@accounts, %{id: nil}, by_type)
-        [Map.merge(v, %{account_id: account.id, resolved: 1}) | rest]
+        [Map.merge(v, %{account_id: account.id}) | rest]
       end
     )
   end
