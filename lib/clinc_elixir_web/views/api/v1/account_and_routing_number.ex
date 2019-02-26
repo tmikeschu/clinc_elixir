@@ -9,13 +9,13 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumber do
       id: 10,
       account: 1234,
       routing: 4321
+    },
+    %{
+      type: :savings,
+      id: 101,
+      account: 7890,
+      routing: 9087
     }
-    # %{
-    #   type: :savings,
-    #   id: 101,
-    #   account: 7890,
-    #   routing: 9087
-    # }
   ]
 
   @doc """
@@ -25,7 +25,7 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumber do
   def render(%{
         request:
           body = %{
-            state: "account_and_routing_number_otp",
+            state: state = "account_and_routing_number_otp",
             intent: intent
           }
       })
@@ -37,7 +37,7 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumber do
 
     body
     |> log(:req, handling)
-    |> add_response_slots("account_and_routing_number", %{response_key: "otp_init"})
+    |> add_response_slots(state, %{response_key: "otp_init"})
     |> log(:res, handling)
   end
 
@@ -48,7 +48,8 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumber do
   def render(%{
         request:
           body = %{
-            state: "account_and_routing_number_otp",
+            state: state = "account_and_routing_number_otp",
+            intent: "account_and_routing_number_otp_update",
             query: query
           }
       }) do
@@ -64,7 +65,7 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumber do
       _ ->
         body
         |> log(:req, handling)
-        |> add_response_slots("account_and_routing_number", %{
+        |> add_response_slots(state, %{
           response_key: "otp_incorrect"
         })
         |> log(:res, handling)
@@ -77,11 +78,11 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumber do
   def render(%{
         request:
           body = %{
-            state: "account_and_routing_number",
+            state: state = "account_and_routing_number",
             intent: "account_and_routing_number_otp_update",
             slots: %{
               _ACCOUNTS_: %{
-                values: [%{account_id: account_id} | _]
+                values: accounts
               }
             }
           }
@@ -90,9 +91,9 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumber do
 
     body
     |> log(:req, handling)
-    |> add_response_slots("account_and_routing_number", %{
-      response_key: "account_and_routing_number",
-      account: Enum.find(@accounts, &(&1.id == account_id))
+    |> add_response_slots(state, %{
+      response_key: if(length(accounts) == 1, do: "single_account", else: "multiple_accounts"),
+      accounts: Enum.map(accounts, &Enum.find(@accounts, fn a -> a.id == &1.account_id end))
     })
     |> log(:res, handling)
   end
@@ -104,13 +105,13 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumber do
   def render(%{
         request:
           body = %{
-            state: "account_and_routing_number",
+            state: state = "account_and_routing_number",
             intent: "cs_cancel"
           }
       }) do
     body
     |> log(:req, "OTP_CANCEL")
-    |> add_response_slots("account_and_routing_number", %{
+    |> add_response_slots(state, %{
       response_key: "otp_cancel"
     })
     |> log(:res, "OTP_CANCEL")
@@ -144,7 +145,7 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumber do
   def render(%{
         request:
           %{
-            state: "account_and_routing_number",
+            state: state = "account_and_routing_number",
             slots: %{}
           } = body
       }) do
@@ -154,7 +155,7 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumber do
       [] ->
         body
         |> log(:req, handling)
-        |> add_response_slots("account_and_routing_number", %{
+        |> add_response_slots(state, %{
           response_key: "no_accounts"
         })
         |> log(:res, handling)
@@ -171,19 +172,17 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumber do
         |> log(:req, handling)
         |> put_in(
           [:slots, :_ACCOUNTS_],
-          %{type: "string", values: [%{resolved: 1, accounts: @accounts}]}
+          %{
+            type: "string",
+            values:
+              account_list
+              |> Enum.map(&%{resolved: 1, account_id: &1.id})
+          }
         )
-        |> add_response_slots("account_and_routing_number", %{
-          account_list: account_list,
-          response_key: "multiple_accounts"
-        })
+        |> send_to_otp
         |> log(:res, handling)
     end
   end
-
-  @doc """
-  No matching pattern returns the body as is
-  """
 
   defp resolve_single_account(body, account_id) do
     put_in(

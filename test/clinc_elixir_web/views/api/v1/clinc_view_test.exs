@@ -10,30 +10,21 @@ defmodule ClincElixirWeb.Api.V1.ClincViewTest do
     device: "default",
     dialaog: "HL4JqjMHT0jLPRe3X0nni5Ic5mtFtTN6",
     external_user_id: "1",
-    intent: "account_and_routing_number_start",
+    intent: "unknown",
     intent_probability: 0.6871070981756203,
     lat: 0,
     lon: 0,
     qid: "97c60b18-dfb5-446d-a3dc-d53db4a34ebab",
-    query: "what is my account and routing number",
+    query: "blah blah blah blah blah blah blah blah blah blah blah blah",
     sentiment: 0,
     session_id: "edb7a711408444bbac9d54e14dfa43f9",
     slots: %{},
-    state: "account_and_routing_number",
+    state: "unknown",
     time_offset: 0
   }
 
-  test "renders query.json for no slots and account_and_routing_number_start" do
+  test "handles unconfigured state with empty response" do
     actual = render(ClincView, "query.json", %{request: @request})
-
-    expected =
-      @request
-      |> put_in(
-        [:slots, :_ACCOUNTS_],
-        %{type: "string", values: [%{account_id: 10, resolved: 1}]}
-      )
-      |> Map.replace!(:state, "account_and_routing_number_otp")
-
-    assert actual == expected
+    assert actual == %{}
   end
 end
