@@ -24,7 +24,8 @@ defmodule ClincElixirWeb.Api.V1.ClincViewTest do
   }
 
   test "handles unconfigured state with empty response" do
-    actual = render(ClincView, "query.json", %{request: @request})
-    assert actual == %{}
+    assert_raise(KeyError, fn ->
+      render(ClincView, "query.json", %{request: @request})
+    end)
   end
 end

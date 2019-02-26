@@ -1,8 +1,6 @@
 defmodule ClincElixirWeb.Api.V1.ClincController do
   use ClincElixirWeb, :controller
 
-  require Logger
-
   def query(conn, params) do
     render(conn, "query.json", request: atomize(params))
   end

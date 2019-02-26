@@ -1,6 +1,6 @@
 defmodule ClincElixirWeb.Api.V1.ClincView do
   use ClincElixirWeb, :view
-  alias ClincElixirWeb.Api.V1.{AccountAndRoutingNumber, GetBalance, Default, AccountTransfer}
+  alias ClincElixirWeb.Api.V1.{AccountAndRoutingNumber, GetBalance, AccountTransfer}
 
   @renderers %{
     "account_and_routing_number" => AccountAndRoutingNumber,
@@ -10,6 +10,6 @@ defmodule ClincElixirWeb.Api.V1.ClincView do
   }
 
   def render("query.json", data = %{request: %{state: state}}) do
-    Map.get(@renderers, state, Default).render(data)
+    Map.fetch!(@renderers, state).render(data)
   end
 end
