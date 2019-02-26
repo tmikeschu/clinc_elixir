@@ -22,7 +22,7 @@ defmodule ClincElixirWeb.Api.V1.GetBalance do
   ]
 
   @doc """
-  Handles the final success case where information is displayed.
+  Get balance when slot is provided
   """
   def render(%{
         request:
@@ -63,8 +63,7 @@ defmodule ClincElixirWeb.Api.V1.GetBalance do
   end
 
   @doc """
-  Handles the BL transition from account_and_routing_number to _otp.
-  Business logic transitions to the otp state run an initial request before a user says anything
+  Handles get_balance without slots. Chooses first account.
   """
   def render(%{
         request:
@@ -81,7 +80,7 @@ defmodule ClincElixirWeb.Api.V1.GetBalance do
     |> log(:req, handling)
     |> add_response_slots(state, %{
       response_key: "balance_default",
-      acct_type: account.type,
+      acct_type: Atom.to_string(account.type),
       balance: account.balance
     })
     |> log(:res, handling)
