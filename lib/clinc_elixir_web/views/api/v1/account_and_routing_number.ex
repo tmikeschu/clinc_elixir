@@ -93,7 +93,7 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumber do
     |> log(:req, handling)
     |> add_response_slots(state, %{
       response_key: if(length(accounts) == 1, do: "single_account", else: "multiple_accounts"),
-      accounts: Enum.map(accounts, &Enum.find(@accounts, fn a -> a.id == &1.account_id end))
+      accounts_list: Enum.map(accounts, &Enum.find(@accounts, fn a -> a.id == &1.account_id end))
     })
     |> log(:res, handling)
   end

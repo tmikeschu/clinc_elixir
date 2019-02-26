@@ -153,7 +153,7 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumberTest do
 
     response_data = %{
       response_key: "single_account",
-      accounts: [
+      accounts_list: [
         %{
           type: :checking,
           id: 10,
@@ -194,7 +194,7 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumberTest do
 
     response_data = %{
       response_key: "multiple_accounts",
-      accounts: [
+      accounts_list: [
         %{
           type: :checking,
           id: 10,
