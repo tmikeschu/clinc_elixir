@@ -198,12 +198,16 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumber do
     |> update_in(
       [:slots, :_ACCOUNTS_, :values],
       fn [v | rest] ->
-        by_type = &(Atom.to_string(&1.type) == v.account_dest)
+        by_type = &(Atom.to_string(&1.type) == get_account_token(v))
         account = Enum.find(@accounts, %{id: nil}, by_type)
         [Map.merge(v, %{account_id: account.id}) | rest]
       end
     )
   end
+
+  defp get_account_token(%{account_dest: a}), do: a
+  defp get_account_token(%{tokens: t}), do: t
+  defp get_account_token(_), do: ""
 
   defp send_to_otp(body) do
     Map.replace!(body, :state, "account_and_routing_number_otp")
