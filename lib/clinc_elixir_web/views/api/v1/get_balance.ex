@@ -46,14 +46,18 @@ defmodule ClincElixirWeb.Api.V1.GetBalance do
         body
         |> log(:req, handling)
         |> resolve_slot(:_SOURCE_ACCOUNT_)
-        |> add_response_slots(state, %{response_key: "no_account_found"})
+        |> add_response_slots(state, %{response_key: "no_account_found", acct_type: tokens})
         |> log(:res, handling)
 
       x ->
         body
         |> log(:req, handling)
         |> resolve_slot(:_SOURCE_ACCOUNT_)
-        |> add_response_slots(state, %{response_key: "balance", balance: x.balance})
+        |> add_response_slots(state, %{
+          response_key: "balance",
+          balance: x.balance,
+          acct_type: tokens
+        })
         |> log(:res, handling)
     end
   end
@@ -71,11 +75,14 @@ defmodule ClincElixirWeb.Api.V1.GetBalance do
       }) do
     handling = "GET_BALANCE_NO_SLOTS"
 
+    account = @accounts |> List.first()
+
     body
     |> log(:req, handling)
     |> add_response_slots(state, %{
       response_key: "balance_default",
-      balance: @accounts |> List.first() |> Map.get(:balance)
+      acct_type: account.type,
+      balance: account.balance
     })
     |> log(:res, handling)
   end
