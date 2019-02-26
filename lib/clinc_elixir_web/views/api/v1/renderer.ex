@@ -29,6 +29,10 @@ defmodule ClincElixirWeb.Api.V1.Renderer do
           fn vs -> Enum.map(vs, &Map.merge(&1, %{resolved: 1})) end
         )
       end
+
+      defp resolve_slots(body, slot_names) do
+        Enum.reduce(slot_names, body, &resolve_slot(&2, &1))
+      end
     end
   end
 end
