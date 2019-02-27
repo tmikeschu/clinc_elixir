@@ -11,5 +11,9 @@ defmodule ClincElixirWeb.Router do
     scope "/v1", Api.V1, as: :v1 do
       post "/clinc/query", ClincController, :query
     end
+
+    scope "/v2", Api.V2, as: :v2 do
+      post "/clinc/query", ClincController, :query
+    end
   end
 end
