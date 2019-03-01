@@ -22,6 +22,10 @@ defmodule ClincElixirWeb.Api.V1.Renderer do
         })
       end
 
+      defp add_visual_data(body, data) do
+        Map.put(body, :visual_payload, data)
+      end
+
       defp resolve_slot(body, slot_name) do
         update_in(
           body,

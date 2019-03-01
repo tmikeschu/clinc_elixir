@@ -58,6 +58,7 @@ defmodule ClincElixirWeb.Api.V1.GetBalance do
           balance: x.balance,
           acct_type: tokens
         })
+        |> add_visual_data(%{account: x})
         |> log(:res, handling)
     end
   end
