@@ -37,6 +37,10 @@ defmodule ClincElixirWeb.Api.V1.Renderer do
       defp resolve_slots(body, slot_names) do
         Enum.reduce(slot_names, body, &resolve_slot(&2, &1))
       end
+
+      defp add_slot(body, slot_name, data) do
+        put_in(body, [:slots, slot_name], data)
+      end
     end
   end
 end

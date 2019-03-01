@@ -59,6 +59,12 @@ defmodule ClincElixirWeb.Api.V1.GetBalance do
           acct_type: tokens
         })
         |> add_visual_data(%{account: x})
+        |> add_slot(:_FEE_, %{
+          type: "string",
+          values: [
+            %{resolved: 1, value: "5.00"}
+          ]
+        })
         |> log(:res, handling)
     end
   end

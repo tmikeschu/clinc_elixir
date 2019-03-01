@@ -170,8 +170,8 @@ defmodule ClincElixirWeb.Api.V1.AccountAndRoutingNumber do
       account_list ->
         body
         |> log(:req, handling)
-        |> put_in(
-          [:slots, :_ACCOUNTS_],
+        |> add_slot(
+          :_ACCOUNTS_,
           %{
             type: "string",
             values:
