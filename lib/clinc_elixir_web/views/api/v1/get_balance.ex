@@ -10,14 +10,16 @@ defmodule ClincElixirWeb.Api.V1.GetBalance do
       id: 10,
       account: 1234,
       routing: 4321,
-      balance: 4000
+      balance: 4000,
+      fee: 10
     },
     %{
       type: :savings,
       id: 101,
       account: 7890,
       routing: 9087,
-      balance: 200
+      balance: 200,
+      fee: 0
     }
   ]
 
@@ -62,7 +64,7 @@ defmodule ClincElixirWeb.Api.V1.GetBalance do
         |> add_slot(:_FEE_, %{
           type: "string",
           values: [
-            %{resolved: 1, value: "5.00"}
+            %{resolved: 1, value: x.fee}
           ]
         })
         |> log(:res, handling)

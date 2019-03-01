@@ -60,6 +60,12 @@ defmodule ClincElixirWeb.Api.V1.GetBalanceTest do
         values: [
           %{resolved: 1, tokens: "checking"}
         ]
+      },
+      _FEE_: %{
+        type: "string",
+        values: [
+          %{resolved: 1, value: 10}
+        ]
       }
     }
 
