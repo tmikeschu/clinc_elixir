@@ -29,7 +29,7 @@ defmodule ClincElixirWeb.Api.V1.AccountTransfer do
   def render(accounts, %{
         request:
           body = %{
-            state: "account_transfer_confirmed" = state,
+            state: "acct_transfer_confirmed" = state,
             slots: %{
               _SOURCE_ACCOUNT_: %{
                 values: [%{tokens: source_token} | _]
